@@ -31,7 +31,6 @@
  *
  * License 1.0
  */
-
 package fr.paris.lutece.plugins.sitelabels.business;
 
 import fr.paris.lutece.plugins.sitelabels.service.LabelService;
@@ -48,32 +47,31 @@ public class LabelBusinessTest extends LuteceTestCase
     public void testBusiness(  )
     {
         // Initialize an object
-        Label label = new Label();
+        Label label = new Label(  );
         label.setKey( KEY1 );
         label.setValue( VALUE1 );
 
         // Create test
         LabelService.create( label );
-        Label labelStored = LabelService.findByPrimaryKey( label.getKey() );
-        assertEquals( labelStored.getKey() , label.getKey() );
-        assertEquals( labelStored.getValue() , label.getValue() );
+
+        Label labelStored = LabelService.findByPrimaryKey( label.getKey(  ) );
+        assertEquals( labelStored.getKey(  ), label.getKey(  ) );
+        assertEquals( labelStored.getValue(  ), label.getValue(  ) );
 
         // Update test
         label.setKey( KEY2 );
         label.setValue( VALUE2 );
         LabelService.update( label );
-        labelStored = LabelService.findByPrimaryKey( label.getKey() );
-        assertEquals( labelStored.getKey() , label.getKey() );
-        assertEquals( labelStored.getValue() , label.getValue() );
+        labelStored = LabelService.findByPrimaryKey( label.getKey(  ) );
+        assertEquals( labelStored.getKey(  ), label.getKey(  ) );
+        assertEquals( labelStored.getValue(  ), label.getValue(  ) );
 
         // List test
-        LabelService.getLabelsList();
+        LabelService.getLabelsList(  );
 
         // Delete test
-        LabelService.remove( label.getKey() );
-        labelStored = LabelService.findByPrimaryKey( label.getKey() );
+        LabelService.remove( label.getKey(  ) );
+        labelStored = LabelService.findByPrimaryKey( label.getKey(  ) );
         assertNull( labelStored );
-        
     }
-
 }

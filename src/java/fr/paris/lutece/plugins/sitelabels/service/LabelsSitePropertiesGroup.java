@@ -43,6 +43,7 @@ public class LabelsSitePropertiesGroup implements ILocalizedSitePropertiesGroup
 {
     private static final String KEY_NAME = "sitelabels.site_properties_group.name";
     private static final String KEY_DESCRIPTION = "sitelabels.site_properties_group.description";
+
     /**
      * {@inheritDoc }
      */

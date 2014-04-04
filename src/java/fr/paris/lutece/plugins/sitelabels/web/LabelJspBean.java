@@ -161,7 +161,8 @@ public class LabelJspBean extends ManageSiteLabelsJspBean
         {
             return redirectView( request, VIEW_CREATE_LABEL );
         }
-        _label.setKey( LabelService.PREFIX + _label.getKey() );
+
+        _label.setKey( LabelService.PREFIX + _label.getKey(  ) );
         LabelService.create( _label );
         _label = null;
         addInfo( INFO_LABEL_CREATED, getLocale(  ) );
@@ -181,7 +182,7 @@ public class LabelJspBean extends ManageSiteLabelsJspBean
     {
         String strKey = request.getParameter( PARAMETER_KEY );
         UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_LABEL ) );
-        url.addParameter( PARAMETER_KEY, strKey  );
+        url.addParameter( PARAMETER_KEY, strKey );
 
         String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_LABEL,
                 url.getUrl(  ), AdminMessage.TYPE_CONFIRMATION );
@@ -220,6 +221,7 @@ public class LabelJspBean extends ManageSiteLabelsJspBean
         {
             _label = LabelService.findByPrimaryKey( strKey );
         }
+
         Map<String, Object> model = getModel(  );
         model.put( MARK_LABEL, _label );
 
@@ -245,6 +247,7 @@ public class LabelJspBean extends ManageSiteLabelsJspBean
 
             return redirect( request, VIEW_MODIFY_LABEL, mapParameters );
         }
+
         LabelService.update( _label );
         _label = null;
         addInfo( INFO_LABEL_UPDATED, getLocale(  ) );

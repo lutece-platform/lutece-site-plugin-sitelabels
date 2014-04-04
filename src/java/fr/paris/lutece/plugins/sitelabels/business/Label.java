@@ -44,11 +44,9 @@ import javax.validation.constraints.*;
 public class Label
 {
     // Variables declarations 
-
     @NotEmpty( message = "#i18n{portal.validation.message.notEmpty}" )
-    @Pattern( regexp="[a-z][a-z_\\.]*", message = "#i18n{sitelabels.validation.label.Key.pattern}" )
+    @Pattern( regexp = "[a-z][a-z_\\.]*", message = "#i18n{sitelabels.validation.label.Key.pattern}" )
     private String _strKey;
-
     @NotEmpty( message = "#i18n{portal.validation.message.notEmpty}" )
     private String _strValue;
 
