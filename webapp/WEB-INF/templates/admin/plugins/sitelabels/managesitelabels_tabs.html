@@ -1,0 +1,11 @@
+<#macro tabs tab >
+<div>
+    <ul class="nav nav-tabs">
+        <li <#if tab="label">class="active"</#if>>
+            <a href="jsp/admin/plugins/sitelabels/ManageLabels.jsp">
+                #i18n{sitelabels.manage_labels.pageTitle}
+            </a>
+        </li>
+    </ul>
+</div>
+</#macro>

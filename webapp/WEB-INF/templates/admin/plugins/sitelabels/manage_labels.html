@@ -1,0 +1,59 @@
+<#include "managesitelabels_tabs.html" />
+<@tabs tab="label" />
+
+<div class="row-fluid" >
+    <div class="span12">
+
+        <@messages infos=infos />
+
+        <div class="alert alert-info">
+            #i18n{sitelabels.manage_labels.info}
+        </div>
+            
+        <form method="post"  action="jsp/admin/plugins/sitelabels/ManageLabels.jsp">
+            <button name="view_createLabel" class="btn btn-primary pull-right" type="submit">
+                <i class="icon-plus icon-white"></i>
+                #i18n{sitelabels.manage_labels.buttonAdd}
+            </button>
+        </form>
+
+        <h4>#i18n{sitelabels.manage_labels.tableLabel}</h4>    
+
+        <@paginationAdmin paginator=paginator combo=1 />
+
+        <table class="table table-condensed table-striped">
+            <tr>
+                <th>#i18n{sitelabels.manage_labels.columnKey}</th>
+                <th>#i18n{sitelabels.manage_labels.columnValue}</th>
+                <th>#i18n{portal.util.labelActions}</th>
+            </tr>
+            <#list label_list as label >
+            <tr>
+            <input type="hidden" id="id" name="id"  />
+            <td>
+                ${label.key}
+            </td>
+            <td>
+                ${label.value}
+            </td>
+            <td>
+                <a href="jsp/admin/plugins/sitelabels/ManageLabels.jsp?view=modifyLabel&id=${label.key}"
+                   class="btn btn-primary btn-small" title="#i18n{portal.util.labelModify}">
+                    <i class="icon-edit icon-white"></i>
+                </a>
+
+                <a href="jsp/admin/plugins/sitelabels/ManageLabels.jsp?action=confirmRemoveLabel&id=${label.key}"
+                   class="btn btn-danger btn-small" title="#i18n{portal.util.labelDelete}" >
+                    <i class="icon-trash icon-white"></i>
+                </a>
+            </td>
+            </tr>
+            </#list>
+        </table>
+
+        <@paginationAdmin paginator=paginator />
+
+    </div>
+</div>
+
+

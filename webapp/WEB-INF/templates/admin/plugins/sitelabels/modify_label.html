@@ -1,0 +1,45 @@
+<#include "managesitelabels_tabs.html" />
+<@tabs tab="label" />
+
+<div class="row" >
+    <div class="span12">
+
+    <form class="form-horizontal" method="post" action="jsp/admin/plugins/sitelabels/ManageLabels.jsp">
+        <fieldset>
+            <legend>#i18n{sitelabels.modify_label.tableLabel}</legend>
+
+            <@messages errors=errors />
+
+
+            <div class="control-group">
+                <label class="control-label" for="key" >#i18n{sitelabels.modify_label.labelKey} * :</label>
+                <div class="controls">
+                    <input type="text" id="key" name="key"  maxlength="50" value="${label.key}" tabindex="1" disabled />
+                    <span class="help-block">#i18n{sitelabels.modify_label.labelKey.help}</span>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="value" >#i18n{sitelabels.modify_label.labelValue} * :</label>
+                <div class="controls">
+                    <input class="input-xxlarge" type="text" id="value" name="value"  maxlength="50" value="${label.value}" tabindex="1" />
+                    <span class="help-block">#i18n{sitelabels.modify_label.labelValue.help}</span>
+                </div>
+            </div>
+
+
+            <div class="form-actions">   
+                <button name="action_modifyLabel" class="btn btn-primary" type="submit" tabindex="4" >
+                    #i18n{portal.util.labelModify}
+                </button>
+                <button name="view_manageLabels" class="btn" type="submit" >
+                    #i18n{portal.util.labelCancel}
+                </button>	
+            </div>
+
+        </fieldset>
+    </form>
+    </div>  
+
+</div>
+
