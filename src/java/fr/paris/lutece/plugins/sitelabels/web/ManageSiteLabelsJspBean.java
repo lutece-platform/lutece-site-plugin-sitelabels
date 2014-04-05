@@ -47,8 +47,4 @@ public abstract class ManageSiteLabelsJspBean extends MVCAdminJspBean
     protected static final String MARK_PAGINATOR = "paginator";
     protected static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
 
-    //Variables
-    protected int _nDefaultItemsPerPage;
-    protected String _strCurrentPageIndex;
-    protected int _nItemsPerPage;
 }

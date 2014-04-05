@@ -102,7 +102,16 @@ public class LabelJspBean extends ManageSiteLabelsJspBean
 
     // Session variable to store working values
     private Label _label;
+    //Variables
+    private int _nDefaultItemsPerPage;
+    private String _strCurrentPageIndex;
+    private int _nItemsPerPage;
 
+    /**
+     * Get ManageLabels View
+     * @param request The HTTP request
+     * @return The view
+     */
     @View( value = VIEW_MANAGE_LABELS, defaultView = true )
     public String getManageLabels( HttpServletRequest request )
     {

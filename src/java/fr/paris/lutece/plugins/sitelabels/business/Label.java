@@ -33,9 +33,9 @@
  */
 package fr.paris.lutece.plugins.sitelabels.business;
 
-import org.hibernate.validator.constraints.*;
+import javax.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.validation.constraints.*;
 
 
 /**

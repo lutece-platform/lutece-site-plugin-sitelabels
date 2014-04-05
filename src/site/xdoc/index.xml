@@ -1,23 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document>
     <properties>
-        <title>Plugin sitelabels</title>
+        <title>SiteLabels plugin</title>
     </properties>
     <body>
-        <section name="Plugin sitelabels">
+        <section name="SiteLabels plugin">
             <!--
             <p>
                 <img src="images/sitelabels.png" />
             </p>
             -->
             <subsection name="Introduction">
-                <p></p>
+                <p>
+                    This plugin is intended to manage a list of specific labels
+                     that can be added to the HTML templates with the
+                     tag &#35;dskey{<i>key</i>} and whose values​are editable
+                     in <b>"Managing Site Properties"</b>.
+                </p>
             </subsection>
             <subsection name="Configuration">
-                <p></p>
+                <p>None</p>
             </subsection>
             <subsection name="Usage">
-                <p></p>
+                <p>
+                   For optimal integration, it is possible to complete the
+                   resources files: sitelabels_messages_[<i>Locale</i>] to
+                   add labels and help text for the specific keys.
+                </p>
             </subsection>
         </section>
     </body>

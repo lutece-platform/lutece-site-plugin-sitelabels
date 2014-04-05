@@ -7,15 +7,15 @@
  * are met:
  *
  *  1. Redistributions of source code must retain the above copyright notice
- *         and the following disclaimer.
+ *     and the following disclaimer.
  *
  *  2. Redistributions in binary form must reproduce the above copyright notice
- *         and the following disclaimer in the documentation and/or other materials
- *         provided with the distribution.
+ *     and the following disclaimer in the documentation and/or other materials
+ *     provided with the distribution.
  *
  *  3. Neither the name of 'Mairie de Paris' nor 'Lutece' nor the names of its
- *         contributors may be used to endorse or promote products derived from
- *         this software without specific prior written permission.
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -88,7 +88,7 @@ public final class LabelService
     /**
      * Remove the label whose identifier is specified in parameter
      *
-     * @param nLabelId The label Id
+     * @param strKey The Key
      */
     public static void remove( String strKey )
     {
@@ -100,7 +100,7 @@ public final class LabelService
     /**
      * Returns an instance of a label whose identifier is specified in parameter
      *
-     * @param nKey The label primary key
+     * @param strKey The label primary key
      * @return an instance of Label
      */
     public static Label findByPrimaryKey( String strKey )
