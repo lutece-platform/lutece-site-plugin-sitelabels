@@ -14,7 +14,7 @@
             <div class="control-group">
                 <label class="control-label" for="key" >#i18n{sitelabels.modify_label.labelKey} * :</label>
                 <div class="controls">
-                    <input type="text" id="key" name="key"  value="${label.key}" tabindex="1" disabled />
+                    <input class="input-xxlarge" type="text" id="key" name="key"  value="${label.key}" tabindex="1" disabled />
                     <span class="help-block">#i18n{sitelabels.modify_label.labelKey.help}</span>
                 </div>
             </div>
@@ -22,7 +22,12 @@
             <div class="control-group">
                 <label class="control-label" for="value" >#i18n{sitelabels.modify_label.labelValue} * :</label>
                 <div class="controls">
-                    <input class="input-xxlarge" type="text" id="value" name="value" value="${label.value}" tabindex="1" />
+                    <#if label.key?ends_with( ".textblock" )>
+                        <textarea name="value" id="value" >${label.value}</textarea>
+                    <#else>
+                        <input class="input-xxlarge" type="text" id="value" name="value" value="${label.value}" tabindex="2" />
+                    </#if>
+
                     <span class="help-block">#i18n{sitelabels.modify_label.labelValue.help}</span>
                 </div>
             </div>
