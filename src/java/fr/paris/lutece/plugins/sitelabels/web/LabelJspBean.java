@@ -115,6 +115,7 @@ public class LabelJspBean extends ManageSiteLabelsJspBean
     @View( value = VIEW_MANAGE_LABELS, defaultView = true )
     public String getManageLabels( HttpServletRequest request )
     {
+        _label = null;
         _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
         _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_DEFAULT_LIST_LABEL_PER_PAGE, 50 );
         _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage,
@@ -173,7 +174,6 @@ public class LabelJspBean extends ManageSiteLabelsJspBean
 
         _label.setKey( LabelService.PREFIX + _label.getKey(  ) );
         LabelService.create( _label );
-        _label = null;
         addInfo( INFO_LABEL_CREATED, getLocale(  ) );
 
         return redirectView( request, VIEW_MANAGE_LABELS );
@@ -226,7 +226,7 @@ public class LabelJspBean extends ManageSiteLabelsJspBean
     {
         String strKey = request.getParameter( PARAMETER_KEY );
 
-        if ( _label == null )
+        if ( _label == null || ( !_label.getKey().equals( strKey )))
         {
             _label = LabelService.findByPrimaryKey( strKey );
         }
@@ -258,7 +258,6 @@ public class LabelJspBean extends ManageSiteLabelsJspBean
         }
 
         LabelService.update( _label );
-        _label = null;
         addInfo( INFO_LABEL_UPDATED, getLocale(  ) );
 
         return redirectView( request, VIEW_MANAGE_LABELS );
