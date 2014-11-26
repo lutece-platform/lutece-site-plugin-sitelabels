@@ -38,9 +38,9 @@
     </properties>
     
     <scm>
-        <connection>scm:svn:http://dev.lutece.paris.fr/svn/lutece/portal/trunk/plugins/technical/plugin-sitelabels</connection>
-        <developerConnection>scm:svn:https://dev.lutece.paris.fr/svn/lutece/portal/trunk/plugins/technical/plugin-sitelabels</developerConnection>
-        <url>http://dev.lutece.paris.fr/viewvc/lutece/portal/trunk/plugins/technical/plugin-sitelabels</url>
+        <connection>scm:svn:https://github.com/lutece-platform/lutece-site-plugin-sitelabels.git</connection>
+        <developerConnection>scm:svn:https://github.com/lutece-platform/lutece-site-plugin-sitelabels.git</developerConnection>
+        <url>https://github.com/lutece-platform/lutece-site-plugin-sitelabels.git</url>
     </scm>
 
 </project>
