@@ -34,15 +34,15 @@
                 ${label.key}
             </td>
             <td>
-                ${label.value}
+                ${(label.value)?html}
             </td>
             <td>
-                <a href="jsp/admin/plugins/sitelabels/ManageLabels.jsp?view=modifyLabel&id=${label.key}"
+                <a href="jsp/admin/plugins/sitelabels/ManageLabels.jsp?view=modifyLabel&amp;id=${label.key}"
                    class="btn btn-primary btn-small" title="#i18n{portal.util.labelModify}">
                     <i class="icon-edit icon-white"></i>
                 </a>
 
-                <a href="jsp/admin/plugins/sitelabels/ManageLabels.jsp?action=confirmRemoveLabel&id=${label.key}"
+                <a href="jsp/admin/plugins/sitelabels/ManageLabels.jsp?action=confirmRemoveLabel&amp;id=${label.key}"
                    class="btn btn-danger btn-small" title="#i18n{portal.util.labelDelete}" >
                     <i class="icon-trash icon-white"></i>
                 </a>

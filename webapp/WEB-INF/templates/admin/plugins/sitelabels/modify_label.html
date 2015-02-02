@@ -23,9 +23,9 @@
                 <label class="control-label" for="value" >#i18n{sitelabels.modify_label.labelValue} * :</label>
                 <div class="controls">
                     <#if label.key?ends_with( ".textblock" )>
-                        <textarea name="value" id="value" >${label.value}</textarea>
+                        <textarea name="value" id="value" >${(label.value)?html}</textarea>
                     <#else>
-                        <input class="input-xxlarge" type="text" id="value" name="value" value="${label.value}" tabindex="2" />
+                        <input class="input-xxlarge" type="text" id="value" name="value" value="${(label.value)?html}" tabindex="2" />
                     </#if>
 
                     <span class="help-block">#i18n{sitelabels.modify_label.labelValue.help}</span>
