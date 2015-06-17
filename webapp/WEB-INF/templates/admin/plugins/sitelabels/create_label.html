@@ -1,8 +1,8 @@
 <#include "managesitelabels_tabs.html" />
 <@tabs tab="label" />
 
-<div class="row" >
-    <div class="span12">
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
     <form class="form-horizontal" method="post" action="jsp/admin/plugins/sitelabels/ManageLabels.jsp">
         <fieldset>
@@ -11,17 +11,17 @@
             <@messages errors=errors />
 
             <input type="hidden" id="id" name="id"  />
-            <div class="control-group">
-                <label class="control-label" for="key" >#i18n{sitelabels.create_label.labelKey} * :</label>
-                <div class="controls">
-                    <input type="text" id="key" name="key" value="${(label.key!'')?html}"  tabindex="1" />
+            <div class="form-group">
+                <label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="key">#i18n{sitelabels.create_label.labelKey} * :</label>
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <input type="text" class="form-control input-sm" id="key" name="key" value="${(label.key!'')?html}" tabindex="1">
                     <span class="help-block">#i18n{sitelabels.create_label.labelKey.help}</span>
                 </div>
             </div>
-            <div class="control-group">
-                <label class="control-label" for="value" >#i18n{sitelabels.create_label.labelValue} * :</label>
-                <div class="controls">
-                    <input  class="input-xxlarge" type="text" id="value" name="value" value="${(label.value!'')?html}" tabindex="2" />
+            <div class="form-group">
+                <label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="value" >#i18n{sitelabels.create_label.labelValue} * :</label>
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <input class="form-control input-sm" type="text" id="value" name="value" value="${(label.value!'')?html}" tabindex="2">
                     <span class="help-block">#i18n{sitelabels.create_label.labelValue.help}</span>
                 </div>
             </div>
@@ -30,7 +30,7 @@
                 <button name="action_createLabel" class="btn btn-primary" type="submit" tabindex="4">
                     #i18n{portal.util.labelCreate}
                 </button>
-                <button name="view_manageLabels" class="btn" type="submit" >
+                <button name="view_manageLabels" class="btn" type="submit">
                     #i18n{portal.util.labelCancel}
                 </button>
             </div>

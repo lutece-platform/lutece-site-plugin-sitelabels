@@ -2,30 +2,29 @@
 <@tabs tab="label" />
 
 <div class="row" >
-    <div class="span12">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
     <form class="form-horizontal" method="post" action="jsp/admin/plugins/sitelabels/ManageLabels.jsp">
         <fieldset>
             <legend>#i18n{sitelabels.modify_label.tableLabel}</legend>
 
             <@messages errors=errors />
-
-
-            <div class="control-group">
-                <label class="control-label" for="key" >#i18n{sitelabels.modify_label.labelKey} * :</label>
-                <div class="controls">
-                    <input class="input-xxlarge" type="text" id="key" name="key"  value="${label.key}" tabindex="1" disabled />
+			
+			<div class="form-group">
+                <label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="key" >#i18n{sitelabels.modify_label.labelKey} * :</label>
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <input class="form-control input-sm" type="text" id="key" name="key" value="${label.key}" tabindex="1" disabled>
                     <span class="help-block">#i18n{sitelabels.modify_label.labelKey.help}</span>
                 </div>
             </div>
 
-            <div class="control-group">
-                <label class="control-label" for="value" >#i18n{sitelabels.modify_label.labelValue} * :</label>
-                <div class="controls">
+            <div class="form-group">
+                <label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="value" >#i18n{sitelabels.modify_label.labelValue} * :</label>
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <#if label.key?ends_with( ".textblock" )>
-                        <textarea name="value" id="value" >${(label.value)?html}</textarea>
+                        <textarea name="value" id="value" class="form-control input-sm">${(label.value)?html}</textarea>
                     <#else>
-                        <input class="input-xxlarge" type="text" id="value" name="value" value="${(label.value)?html}" tabindex="2" />
+                        <input class="form-control input-sm" type="text" id="value" name="value" value="${(label.value)?html}" tabindex="2">
                     </#if>
 
                     <span class="help-block">#i18n{sitelabels.modify_label.labelValue.help}</span>
@@ -34,10 +33,10 @@
 
 
             <div class="form-actions">   
-                <button name="action_modifyLabel" class="btn btn-primary" type="submit" tabindex="4" >
+                <button name="action_modifyLabel" class="btn btn-primary btn-sm" type="submit" tabindex="4">
                     #i18n{portal.util.labelModify}
                 </button>
-                <button name="view_manageLabels" class="btn" type="submit" >
+                <button name="view_manageLabels" class="btn btn-default btn-sm" type="submit">
                     #i18n{portal.util.labelCancel}
                 </button>	
             </div>
