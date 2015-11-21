@@ -194,7 +194,7 @@ public class LabelJspBean extends ManageSiteLabelsJspBean
         url.addParameter( PARAMETER_KEY, strKey );
 
         String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_LABEL,
-                url.getUrl(  ), AdminMessage.TYPE_CONFIRMATION );
+                new Object[] { strKey }, url.getUrl(  ), AdminMessage.TYPE_CONFIRMATION );
 
         return redirect( request, strMessageUrl );
     }
