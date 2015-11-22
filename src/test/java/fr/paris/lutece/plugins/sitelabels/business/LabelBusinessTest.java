@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2015, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.sitelabels.business;
 
+import java.util.List;
+
 import fr.paris.lutece.plugins.sitelabels.service.LabelService;
 import fr.paris.lutece.test.LuteceTestCase;
 
@@ -52,26 +54,62 @@ public class LabelBusinessTest extends LuteceTestCase
         label.setValue( VALUE1 );
 
         // Create test
+        try
+        {
+            LabelService.create( label );
+            fail( "Should not be able to create label with wrong prefix" );
+        } catch ( IllegalArgumentException e )
+        {
+        }
+        Label labelStored = null;
+        try
+        {
+            labelStored = LabelService.findByPrimaryKey( label.getKey(  ) );
+            fail( "Should not be able to read a label with wrong prefix" );
+        } catch ( IllegalArgumentException e )
+        {
+        }
+        label.setKey( LabelService.PREFIX + KEY1 );
         LabelService.create( label );
-
-        Label labelStored = LabelService.findByPrimaryKey( label.getKey(  ) );
+        labelStored = LabelService.findByPrimaryKey( label.getKey(  ) );
         assertEquals( labelStored.getKey(  ), label.getKey(  ) );
         assertEquals( labelStored.getValue(  ), label.getValue(  ) );
 
         // Update test
         label.setKey( KEY2 );
         label.setValue( VALUE2 );
+        try
+        {
+            LabelService.update( label );
+            fail( "Should not be able to update a label with wrong prefix" );
+        } catch ( IllegalArgumentException e )
+        {
+        }
+        label.setKey( LabelService.PREFIX + KEY2 );
         LabelService.update( label );
         labelStored = LabelService.findByPrimaryKey( label.getKey(  ) );
         assertEquals( labelStored.getKey(  ), label.getKey(  ) );
         assertEquals( labelStored.getValue(  ), label.getValue(  ) );
 
-        // List test
-        LabelService.getLabelsList(  );
-
         // Delete test
         LabelService.remove( label.getKey(  ) );
-        labelStored = LabelService.findByPrimaryKey( label.getKey(  ) );
-        assertNull( labelStored );
+
+        // List test
+        List<Label> labels = LabelService.getLabelsList(  );
+        for ( Label aLabel : labels )
+        {
+            if ( aLabel.getKey( ).equals( label.getKey( ) ) )
+            {
+                fail( "label was not removed" );
+            }
+        }
+
+        try
+        {
+            LabelService.remove( KEY1 );
+            fail( "Should not be able to remove a label with wrong prefix" );
+        } catch ( IllegalArgumentException e)
+        {
+        }
     }
 }

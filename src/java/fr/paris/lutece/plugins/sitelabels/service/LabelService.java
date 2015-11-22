@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2015, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -67,6 +67,10 @@ public final class LabelService
      */
     public static Label create( Label label )
     {
+        if ( !label.getKey( ).startsWith( PREFIX ) ) {
+            throw new IllegalArgumentException( "Key does not start with " + PREFIX );
+        }
+
         DatastoreService.setDataValue( label.getKey(  ), label.getValue(  ) );
 
         return label;
@@ -80,6 +84,10 @@ public final class LabelService
      */
     public static Label update( Label label )
     {
+        if ( !label.getKey( ).startsWith( PREFIX ) ) {
+            throw new IllegalArgumentException( "Key does not start with " + PREFIX );
+        }
+
         DatastoreService.setDataValue( label.getKey(  ), label.getValue(  ) );
 
         return label;
@@ -92,6 +100,10 @@ public final class LabelService
      */
     public static void remove( String strKey )
     {
+        if ( !strKey.startsWith( PREFIX ) ) {
+            throw new IllegalArgumentException( "Key does not start with " + PREFIX );
+        }
+
         DatastoreService.removeData( strKey );
     }
 
@@ -105,6 +117,10 @@ public final class LabelService
      */
     public static Label findByPrimaryKey( String strKey )
     {
+        if ( !strKey.startsWith( PREFIX ) ) {
+            throw new IllegalArgumentException( "Key does not start with " + PREFIX );
+        }
+
         Label label = new Label(  );
         label.setKey( strKey );
         label.setValue( DatastoreService.getDataValue( strKey, "" ) );
