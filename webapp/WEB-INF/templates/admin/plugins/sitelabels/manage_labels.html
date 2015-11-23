@@ -27,7 +27,7 @@
                 <th>#i18n{sitelabels.manage_labels.columnValue}</th>
                 <th>#i18n{portal.util.labelActions}</th>
             </tr>
-            <#list label_list as label >
+            <#list label_list?sort_by("key") as label >
             <tr>
             <input type="hidden" id="id" name="id" />
             <td>
