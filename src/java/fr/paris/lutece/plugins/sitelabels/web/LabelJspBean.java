@@ -35,8 +35,10 @@ package fr.paris.lutece.plugins.sitelabels.web;
 
 import fr.paris.lutece.plugins.sitelabels.business.Label;
 import fr.paris.lutece.plugins.sitelabels.service.LabelService;
+import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
+import fr.paris.lutece.portal.service.security.SecurityTokenService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
@@ -151,6 +153,7 @@ public class LabelJspBean extends ManageSiteLabelsJspBean
 
         Map<String, Object> model = getModel(  );
         model.put( MARK_LABEL, _label );
+        model.put( SecurityTokenService.MARK_TOKEN, SecurityTokenService.getInstance( ).getToken( request, ACTION_CREATE_LABEL ) );
 
         return getPage( PROPERTY_PAGE_TITLE_CREATE_LABEL, TEMPLATE_CREATE_LABEL, model );
     }
@@ -160,10 +163,15 @@ public class LabelJspBean extends ManageSiteLabelsJspBean
      *
      * @param request The Http Request
      * @return The Jsp URL of the process result
+     * @throws AccessDeniedException if the CSRF token cannot be validated
      */
     @Action( ACTION_CREATE_LABEL )
-    public String doCreateLabel( HttpServletRequest request )
+    public String doCreateLabel( HttpServletRequest request ) throws AccessDeniedException
     {
+        if ( !SecurityTokenService.getInstance( ).validate( request, ACTION_CREATE_LABEL ) ) {
+            throw new AccessDeniedException( "Invalid CSRF token" );
+        }
+
         populate( _label, request );
 
         // Check constraints
@@ -192,6 +200,7 @@ public class LabelJspBean extends ManageSiteLabelsJspBean
         String strKey = request.getParameter( PARAMETER_KEY );
         UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_LABEL ) );
         url.addParameter( PARAMETER_KEY, strKey );
+        url.addParameter( SecurityTokenService.PARAMETER_TOKEN, SecurityTokenService.getInstance( ).getToken( request, ACTION_REMOVE_LABEL ) );
 
         String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_LABEL,
                 new Object[] { strKey }, url.getUrl(  ), AdminMessage.TYPE_CONFIRMATION );
@@ -204,10 +213,15 @@ public class LabelJspBean extends ManageSiteLabelsJspBean
      *
      * @param request The Http request
      * @return the jsp URL to display the form to manage labels
+     * @throws AccessDeniedException if the CSRF token cannot be validated
      */
     @Action( ACTION_REMOVE_LABEL )
-    public String doRemoveLabel( HttpServletRequest request )
+    public String doRemoveLabel( HttpServletRequest request ) throws AccessDeniedException
     {
+        if ( !SecurityTokenService.getInstance( ).validate( request, ACTION_REMOVE_LABEL ) ) {
+            throw new AccessDeniedException( "Invalid CSRF token" );
+        }
+
         String strKey = request.getParameter( PARAMETER_KEY );
         LabelService.remove( strKey );
         addInfo( INFO_LABEL_REMOVED, getLocale(  ) );
@@ -233,6 +247,7 @@ public class LabelJspBean extends ManageSiteLabelsJspBean
 
         Map<String, Object> model = getModel(  );
         model.put( MARK_LABEL, _label );
+        model.put( SecurityTokenService.MARK_TOKEN, SecurityTokenService.getInstance( ).getToken( request, ACTION_MODIFY_LABEL ) );
 
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_LABEL, TEMPLATE_MODIFY_LABEL, model );
     }
@@ -242,10 +257,15 @@ public class LabelJspBean extends ManageSiteLabelsJspBean
      *
      * @param request The Http request
      * @return The Jsp URL of the process result
+     * @throws AccessDeniedException if the CSRF token cannot be validated
      */
     @Action( ACTION_MODIFY_LABEL )
-    public String doModifyLabel( HttpServletRequest request )
+    public String doModifyLabel( HttpServletRequest request ) throws AccessDeniedException
     {
+        if ( !SecurityTokenService.getInstance( ).validate( request, ACTION_MODIFY_LABEL ) ) {
+            throw new AccessDeniedException( "Invalid CSRF token" );
+        }
+
         populate( _label, request );
 
         // Check constraints
