@@ -23,12 +23,11 @@
             </subsection>
             <subsection name="Usage">
                 <p>
-                    Pour une intégration optimale, il est possible de compléter les 
+                   Pour une intégration optimale, il est possible de compléter les 
                     fichiers ressources : sitelabels_messages_[<i>locale</i>] pour y 
                     ajouter les labels et textes d'aide des clés spécifiques.
-                </p> 
+                </p>
             </subsection>
         </section>
     </body>
 </document>
-
