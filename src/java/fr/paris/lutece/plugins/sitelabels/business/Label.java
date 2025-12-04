@@ -33,8 +33,8 @@
  */
 package fr.paris.lutece.plugins.sitelabels.business;
 
-import javax.validation.constraints.Pattern;
-import org.hibernate.validator.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.NotEmpty;
 
 
 

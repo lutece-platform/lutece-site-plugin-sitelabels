@@ -1,9 +1,9 @@
-<jsp:useBean id="managesitelabelsLabel" scope="session" class="fr.paris.lutece.plugins.sitelabels.web.LabelJspBean" />
-<% String strContent = managesitelabelsLabel.processController ( request , response ); %>
-
 <%@ page errorPage="../../ErrorPage.jsp" %>
+
+${ pageContext.setAttribute( 'strContent', labelJspBean.processController( pageContext.request , pageContext.response ) ) }
+
 <jsp:include page="../../AdminHeader.jsp" />
 
-<%= strContent %>
+${ pageContext.getAttribute( 'strContent' ) }
 
 <%@ include file="../../AdminFooter.jsp" %>

@@ -6,13 +6,14 @@
 
 				<@tform action='jsp/admin/plugins/sitelabels/ManageLabels.jsp'>
 					<@input type='hidden' name='token' id='token' value='${token?html}' />
+					<@input type='hidden' id='key' name='key' value='${(label.key)?html}' />
 					<fieldset>
 						<legend>#i18n{sitelabels.modify_label.tableLabel}</legend>
 
 						<@messages errors=errors />
 						
 						<@formGroup labelFor='key' labelKey='#i18n{sitelabels.modify_label.labelKey}' helpKey='#i18n{sitelabels.modify_label.labelKey.help}' mandatory=true>
-							<@input type='text' id='key' name='key' value=label.key disabled=true />
+							<@input type='text' id='key_view' name='key_view' value=label.key disabled=true />
 						</@formGroup>
 
 						<@formGroup labelFor='value' labelKey='#i18n{sitelabels.modify_label.labelValue}' helpKey='#i18n{sitelabels.modify_label.labelValue.help}' mandatory=true>

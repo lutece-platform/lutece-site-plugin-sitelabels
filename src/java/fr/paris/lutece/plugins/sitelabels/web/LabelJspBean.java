@@ -39,29 +39,40 @@ import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.security.SecurityTokenService;
-import fr.paris.lutece.portal.service.util.AppPropertiesService;
+import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
+import fr.paris.lutece.portal.util.mvc.binding.BindingResult;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
+import fr.paris.lutece.portal.util.mvc.commons.annotations.ModelAttribute;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
-import fr.paris.lutece.portal.web.util.LocalizedPaginator;
-import fr.paris.lutece.util.html.Paginator;
+import fr.paris.lutece.portal.util.mvc.utils.MVCUtils;
+import fr.paris.lutece.portal.web.cdi.mvc.Models;
+import fr.paris.lutece.portal.web.util.IPager;
+import fr.paris.lutece.portal.web.util.Pager;
 import fr.paris.lutece.util.url.UrlItem;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 
 
 /**
  * This class provides the user interface to manage Label features ( manage, create, modify, remove )
  */
+@RequestScoped
+@Named
 @Controller( controllerJsp = "ManageLabels.jsp", controllerPath = "jsp/admin/plugins/sitelabels/", right = "SITELABELS_MANAGEMENT" )
-public class LabelJspBean extends ManageSiteLabelsJspBean
+public class LabelJspBean extends MVCAdminJspBean
 {
     ////////////////////////////////////////////////////////////////////////////
     // Constants
+
+    // Right
+    public static final String RIGHT_MANAGESITELABELS = "SITELABELS_MANAGEMENT";
 
     // templates
     private static final String TEMPLATE_MANAGE_LABELS = "/admin/plugins/sitelabels/manage_labels.html";
@@ -102,12 +113,12 @@ public class LabelJspBean extends ManageSiteLabelsJspBean
     private static final String INFO_LABEL_UPDATED = "sitelabels.info.label.updated";
     private static final String INFO_LABEL_REMOVED = "sitelabels.info.label.removed";
 
-    // Session variable to store working values
     private Label _label;
-    //Variables
-    private int _nDefaultItemsPerPage;
-    private String _strCurrentPageIndex;
-    private int _nItemsPerPage;
+
+    @Inject
+    @Pager( listBookmark = MARK_LABEL_LIST, defaultItemsPerPage = PROPERTY_DEFAULT_LIST_LABEL_PER_PAGE)
+    private IPager<Label, Void> _pager;
+    @Inject Models model;
 
     /**
      * Get ManageLabels View
@@ -117,25 +128,13 @@ public class LabelJspBean extends ManageSiteLabelsJspBean
     @View( value = VIEW_MANAGE_LABELS, defaultView = true )
     public String getManageLabels( HttpServletRequest request )
     {
-        _label = null;
-        _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
-        _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_DEFAULT_LIST_LABEL_PER_PAGE, 50 );
-        _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage,
-                _nDefaultItemsPerPage );
+        List<Label> listLabels = LabelService.getLabelsList(  );
 
-        UrlItem url = new UrlItem( JSP_MANAGE_LABELS );
-        String strUrl = url.getUrl(  );
-        List<Label> listLabels = (List<Label>) LabelService.getLabelsList(  );
+        String strURL = getHomeUrl( request );
 
-        // PAGINATOR
-        LocalizedPaginator paginator = new LocalizedPaginator( listLabels, _nItemsPerPage, strUrl,
-                PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale(  ) );
-
-        Map<String, Object> model = getModel(  );
-
-        model.put( MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPage );
-        model.put( MARK_PAGINATOR, paginator );
-        model.put( MARK_LABEL_LIST, paginator.getPageItems(  ) );
+        _pager.withBaseUrl(strURL)
+                .withListItem(listLabels)
+                .populateModels(request, model, getLocale());
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_LABELS, TEMPLATE_MANAGE_LABELS, model );
     }
@@ -151,9 +150,8 @@ public class LabelJspBean extends ManageSiteLabelsJspBean
     {
         _label = ( _label != null ) ? _label : new Label(  );
 
-        Map<String, Object> model = getModel(  );
         model.put( MARK_LABEL, _label );
-        model.put( SecurityTokenService.MARK_TOKEN, SecurityTokenService.getInstance( ).getToken( request, ACTION_CREATE_LABEL ) );
+        model.put( SecurityTokenService.MARK_TOKEN, getSecurityTokenService().getToken( request, ACTION_CREATE_LABEL ) );
 
         return getPage( PROPERTY_PAGE_TITLE_CREATE_LABEL, TEMPLATE_CREATE_LABEL, model );
     }
@@ -166,25 +164,26 @@ public class LabelJspBean extends ManageSiteLabelsJspBean
      * @throws AccessDeniedException if the CSRF token cannot be validated
      */
     @Action( ACTION_CREATE_LABEL )
-    public String doCreateLabel( HttpServletRequest request ) throws AccessDeniedException
+    public String doCreateLabel(@Valid @ModelAttribute Label label,
+                                BindingResult bindingResult,
+                                HttpServletRequest request ) throws AccessDeniedException
     {
-        if ( !SecurityTokenService.getInstance( ).validate( request, ACTION_CREATE_LABEL ) ) {
+        if ( !getSecurityTokenService().validate( request, ACTION_CREATE_LABEL ) ) {
             throw new AccessDeniedException( "Invalid CSRF token" );
         }
 
-        populate( _label, request );
-
-        // Check constraints
-        if ( !validateBean( _label, VALIDATION_ATTRIBUTES_PREFIX ) )
+        if( bindingResult.isFailed() )
         {
-            return redirectView( request, VIEW_CREATE_LABEL );
+            model.put( MVCUtils.MARK_ERRORS, bindingResult.getAllErrors( ) );
+            model.put( MARK_LABEL, label );
+            model.put( SecurityTokenService.MARK_TOKEN, getSecurityTokenService().getToken( request, ACTION_CREATE_LABEL ) );
+            return getPage( PROPERTY_PAGE_TITLE_CREATE_LABEL, TEMPLATE_CREATE_LABEL, model );
         }
 
-        _label.setKey( LabelService.PREFIX + _label.getKey(  ) );
-        LabelService.create( _label );
-        addInfo( INFO_LABEL_CREATED, getLocale(  ) );
+        label.setKey( LabelService.PREFIX + label.getKey(  ) );
+        LabelService.create( label );
 
-        return redirectView( request, VIEW_MANAGE_LABELS );
+        return redirectToManageView( request, INFO_LABEL_CREATED );
     }
 
     /**
@@ -200,7 +199,7 @@ public class LabelJspBean extends ManageSiteLabelsJspBean
         String strKey = request.getParameter( PARAMETER_KEY );
         UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_LABEL ) );
         url.addParameter( PARAMETER_KEY, strKey );
-        url.addParameter( SecurityTokenService.PARAMETER_TOKEN, SecurityTokenService.getInstance( ).getToken( request, ACTION_REMOVE_LABEL ) );
+        url.addParameter( SecurityTokenService.PARAMETER_TOKEN, getSecurityTokenService().getToken( request, ACTION_REMOVE_LABEL ) );
 
         String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_LABEL,
                 new Object[] { strKey }, url.getUrl(  ), AdminMessage.TYPE_CONFIRMATION );
@@ -218,15 +217,14 @@ public class LabelJspBean extends ManageSiteLabelsJspBean
     @Action( ACTION_REMOVE_LABEL )
     public String doRemoveLabel( HttpServletRequest request ) throws AccessDeniedException
     {
-        if ( !SecurityTokenService.getInstance( ).validate( request, ACTION_REMOVE_LABEL ) ) {
+        if ( !getSecurityTokenService().validate( request, ACTION_REMOVE_LABEL ) ) {
             throw new AccessDeniedException( "Invalid CSRF token" );
         }
 
         String strKey = request.getParameter( PARAMETER_KEY );
         LabelService.remove( strKey );
-        addInfo( INFO_LABEL_REMOVED, getLocale(  ) );
 
-        return redirectView( request, VIEW_MANAGE_LABELS );
+        return redirectToManageView( request, INFO_LABEL_REMOVED );
     }
 
     /**
@@ -245,9 +243,8 @@ public class LabelJspBean extends ManageSiteLabelsJspBean
             _label = LabelService.findByPrimaryKey( strKey );
         }
 
-        Map<String, Object> model = getModel(  );
         model.put( MARK_LABEL, _label );
-        model.put( SecurityTokenService.MARK_TOKEN, SecurityTokenService.getInstance( ).getToken( request, ACTION_MODIFY_LABEL ) );
+        model.put( SecurityTokenService.MARK_TOKEN, getSecurityTokenService().getToken( request, ACTION_MODIFY_LABEL ) );
 
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_LABEL, TEMPLATE_MODIFY_LABEL, model );
     }
@@ -260,26 +257,47 @@ public class LabelJspBean extends ManageSiteLabelsJspBean
      * @throws AccessDeniedException if the CSRF token cannot be validated
      */
     @Action( ACTION_MODIFY_LABEL )
-    public String doModifyLabel( HttpServletRequest request ) throws AccessDeniedException
+    public String doModifyLabel( @Valid @ModelAttribute Label label,
+                                    BindingResult bindingResult,
+                                    HttpServletRequest request ) throws AccessDeniedException
     {
-        if ( !SecurityTokenService.getInstance( ).validate( request, ACTION_MODIFY_LABEL ) ) {
+        if ( !getSecurityTokenService().validate( request, ACTION_MODIFY_LABEL ) ) {
             throw new AccessDeniedException( "Invalid CSRF token" );
         }
 
-        populate( _label, request );
-
-        // Check constraints
-        if ( !validateBean( _label, VALIDATION_ATTRIBUTES_PREFIX ) )
+        if (bindingResult.isFailed() )
         {
-            Map<String, String> mapParameters = new HashMap<String, String>(  );
-            mapParameters.put( PARAMETER_KEY, _label.getKey(  ) );
+            model.put( MVCUtils.MARK_ERRORS, bindingResult.getAllErrors() );
+            model.put( MARK_LABEL, label );
+            model.put( SecurityTokenService.MARK_TOKEN, getSecurityTokenService().getToken( request, ACTION_MODIFY_LABEL ) );
 
-            return redirect( request, VIEW_MODIFY_LABEL, mapParameters );
+            return getPage( PROPERTY_PAGE_TITLE_MODIFY_LABEL, TEMPLATE_MODIFY_LABEL, model );
         }
 
-        LabelService.update( _label );
-        addInfo( INFO_LABEL_UPDATED, getLocale(  ) );
+        LabelService.update( label );
 
-        return redirectView( request, VIEW_MANAGE_LABELS );
+        return redirectToManageView( request, INFO_LABEL_UPDATED );
     }
+
+    /**
+     * Redirect to manage view with information message
+     * @param request The Http request
+     * @param keyInfo key of info message
+     * @return The Jsp URL of the process result
+     */
+    private String redirectToManageView( HttpServletRequest request, String keyInfo )
+    {
+        addInfo( keyInfo, getLocale() );
+
+        List<Label> listLabels = LabelService.getLabelsList(  );
+
+        String strURL = getHomeUrl( request );
+
+        _pager.withBaseUrl(strURL)
+                .withListItem(listLabels)
+                .populateModels(request, model, getLocale());
+
+        return getPage( PROPERTY_PAGE_TITLE_MANAGE_LABELS, TEMPLATE_MANAGE_LABELS, model );
+    }
+
 }

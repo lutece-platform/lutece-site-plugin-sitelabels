@@ -37,29 +37,40 @@ import java.util.Locale;
 
 import fr.paris.lutece.plugins.sitelabels.business.Label;
 import fr.paris.lutece.plugins.sitelabels.service.LabelService;
-import fr.paris.lutece.plugins.sitelabels.utils.MockHttpServletResponse;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
+import fr.paris.lutece.portal.service.security.ISecurityTokenService;
 import fr.paris.lutece.portal.service.security.SecurityTokenService;
+import fr.paris.lutece.test.AdminUserUtils;
 import fr.paris.lutece.test.LuteceTestCase;
-import fr.paris.lutece.test.MokeHttpServletRequest;
+import fr.paris.lutece.test.mocks.MockHttpServletRequest;
+import fr.paris.lutece.test.mocks.MockHttpServletResponse;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
+import jakarta.inject.Inject;
+import org.junit.jupiter.api.Test;
 
 public class LabelJspBeanTest extends LuteceTestCase
 {
+
+    private @Inject LabelJspBean instance;
+    private @Inject ISecurityTokenService _securityTokenService;
+
+    @Test
     public void testGetConfirmRemoveLabel(  ) throws AccessDeniedException
     {
-        LabelJspBean bean = new LabelJspBean( );
-        MokeHttpServletRequest request = new MokeHttpServletRequest( );
+
+        MockHttpServletRequest request = new MockHttpServletRequest( );
         final String testKey = "test_key";
-        request.addMokeParameters( "id", testKey );
-        request.addMokeParameters( "action", "confirmRemoveLabel" );
-        request.registerAdminUserWithRigth( new AdminUser( ), "SITELABELS_MANAGEMENT" );
-        bean.processController( request, new MockHttpServletResponse( ) );
+        request.addParameter( "id", testKey );
+        request.addParameter( "action", "confirmRemoveLabel" );
+        AdminUserUtils.registerAdminUserWithRight( request, new AdminUser( ), LabelJspBean.RIGHT_MANAGESITELABELS );
+
+        instance.processController( request, new MockHttpServletResponse());
+
         AdminMessage message = AdminMessageService.getMessage( request );
         assertNotNull( message );
         ReferenceList listLanguages = I18nService.getAdminLocales( Locale.FRANCE );
@@ -69,24 +80,25 @@ public class LabelJspBeanTest extends LuteceTestCase
         }
     }
 
+    @Test
     public void testDoCreateLabel(  )
     {
-        LabelJspBean bean = new LabelJspBean( );
-        MokeHttpServletRequest request = new MokeHttpServletRequest( );
+        MockHttpServletRequest request = new MockHttpServletRequest( );
         try
         {
             // populate LabelJspBean#_label
-            bean.getCreateLabel( request );
+            instance.getCreateLabel( request );
         } catch ( Throwable t)
         {
         }
         final String testKey = "test_key";
-        request.addMokeParameters( "key", testKey );
-        request.addMokeParameters( "value", testKey );
-        request.addMokeParameters( "action", "createLabel" );
-        request.registerAdminUserWithRigth( new AdminUser( ), "SITELABELS_MANAGEMENT" );
+        request.addParameter( "key", testKey );
+        request.addParameter( "value", testKey );
+        request.addParameter( "action", "createLabel" );
+        AdminUserUtils.registerAdminUserWithRight( request, new AdminUser( ), LabelJspBean.RIGHT_MANAGESITELABELS );
+
         try {
-            bean.processController( request, new MockHttpServletResponse( ) );
+            instance.processController( request, new MockHttpServletResponse( ) );
             fail( "Should not succeed without CSRF token" );
         } catch ( AccessDeniedException e)
         {
@@ -94,14 +106,15 @@ public class LabelJspBeanTest extends LuteceTestCase
         {
             LabelService.remove( LabelService.PREFIX + testKey );
         }
-        request = new MokeHttpServletRequest( );
-        request.addMokeParameters( "key", testKey );
-        request.addMokeParameters( "value", testKey );
-        request.addMokeParameters( "action", "createLabel" );
-        request.addMokeParameters( SecurityTokenService.PARAMETER_TOKEN, SecurityTokenService.getInstance( ).getToken( request, "createLabel" ) );
-        request.registerAdminUserWithRigth( new AdminUser( ), "SITELABELS_MANAGEMENT" );
+        request = new MockHttpServletRequest( );
+        request.addParameter( "key", testKey );
+        request.addParameter( "value", testKey );
+        request.addParameter( "action", "createLabel" );
+        request.addParameter( SecurityTokenService.PARAMETER_TOKEN, _securityTokenService.getToken( request, "createLabel" ) );
+        AdminUserUtils.registerAdminUserWithRight( request, new AdminUser( ), LabelJspBean.RIGHT_MANAGESITELABELS );
+
         try {
-            bean.processController( request, new MockHttpServletResponse( ) );
+            instance.processController( request, new MockHttpServletResponse( ) );
             Label label = LabelService.findByPrimaryKey( LabelService.PREFIX + testKey );
             assertNotNull( label );
             assertEquals( LabelService.PREFIX + testKey, label.getKey( ) );
@@ -115,15 +128,15 @@ public class LabelJspBeanTest extends LuteceTestCase
         }
     }
 
+    @Test
     public void testDoModifyLabel(  )
     {
-        LabelJspBean bean = new LabelJspBean( );
-        MokeHttpServletRequest request = new MokeHttpServletRequest( );
+        MockHttpServletRequest request = new MockHttpServletRequest( );
         try
         {
             // populate LabelJspBean#_label
-            request.addMokeParameters( "id", LabelService.PREFIX + "testkeytomodify" );
-            bean.getModifyLabel( request );
+            request.addParameter( "id", LabelService.PREFIX + "testkeytomodify" );
+            instance.getModifyLabel( request );
         } catch ( Throwable t)
         {
         }
@@ -133,24 +146,26 @@ public class LabelJspBeanTest extends LuteceTestCase
         LabelService.create( toModify );
         try
         {
-            request.addMokeParameters( "key", toModify.getKey( ) );
-            request.addMokeParameters( "value", "mod" );
-            request.addMokeParameters( "action", "modifyLabel" );
-            request.registerAdminUserWithRigth( new AdminUser( ), "SITELABELS_MANAGEMENT" );
+            request.addParameter( "key", toModify.getKey( ) );
+            request.addParameter( "value", "mod" );
+            request.addParameter( "action", "modifyLabel" );
+            AdminUserUtils.registerAdminUserWithRight( request, new AdminUser( ), LabelJspBean.RIGHT_MANAGESITELABELS );
+
             try {
-                bean.processController( request, new MockHttpServletResponse( ) );
+                instance.processController( request, new MockHttpServletResponse( ) );
                 fail( "Should not succeed without CSRF token" );
             } catch ( AccessDeniedException e)
             {
             }
-            request = new MokeHttpServletRequest( );
-            request.addMokeParameters( "key", toModify.getKey( ) );
-            request.addMokeParameters( "value", "mod" );
-            request.addMokeParameters( "action", "modifyLabel" );
-            request.addMokeParameters( SecurityTokenService.PARAMETER_TOKEN, SecurityTokenService.getInstance( ).getToken( request, "modifyLabel" ) );
-            request.registerAdminUserWithRigth( new AdminUser( ), "SITELABELS_MANAGEMENT" );
+            request = new MockHttpServletRequest( );
+            request.addParameter( "key", toModify.getKey( ) );
+            request.addParameter( "value", "mod" );
+            request.addParameter( "action", "modifyLabel" );
+            request.addParameter( SecurityTokenService.PARAMETER_TOKEN, _securityTokenService.getToken( request, "modifyLabel" ) );
+            AdminUserUtils.registerAdminUserWithRight( request, new AdminUser( ), LabelJspBean.RIGHT_MANAGESITELABELS );
+
             try {
-                bean.processController( request, new MockHttpServletResponse( ) );
+                instance.processController( request, new MockHttpServletResponse( ) );
                 Label label = LabelService.findByPrimaryKey( toModify.getKey( ) );
                 assertNotNull( label );
                 assertEquals( toModify.getKey( ), label.getKey( ) );
@@ -165,32 +180,34 @@ public class LabelJspBeanTest extends LuteceTestCase
         }
     }
 
+    @Test
     public void testDoRemoveLabel(  )
     {
-        LabelJspBean bean = new LabelJspBean( );
-        MokeHttpServletRequest request = new MokeHttpServletRequest( );
+        MockHttpServletRequest request = new MockHttpServletRequest( );
         Label toRemove = new Label( );
         toRemove.setKey( LabelService.PREFIX + "testkeytoremove" );
         toRemove.setValue( "orig" );
         LabelService.create( toRemove );
         try
         {
-            request.addMokeParameters( "id", toRemove.getKey( ) );
-            request.addMokeParameters( "action", "removeLabel" );
-            request.registerAdminUserWithRigth( new AdminUser( ), "SITELABELS_MANAGEMENT" );
+            request.addParameter( "id", toRemove.getKey( ) );
+            request.addParameter( "action", "removeLabel" );
+            AdminUserUtils.registerAdminUserWithRight( request, new AdminUser( ), LabelJspBean.RIGHT_MANAGESITELABELS );
+
             try {
-                bean.processController( request, new MockHttpServletResponse( ) );
+                instance.processController( request, new MockHttpServletResponse( ) );
                 fail( "Should not succeed without CSRF token" );
             } catch ( AccessDeniedException e)
             {
             }
-            request = new MokeHttpServletRequest( );
-            request.addMokeParameters( "id", toRemove.getKey( ) );
-            request.addMokeParameters( "action", "removeLabel" );
-            request.addMokeParameters( SecurityTokenService.PARAMETER_TOKEN, SecurityTokenService.getInstance( ).getToken( request, "removeLabel" ) );
-            request.registerAdminUserWithRigth( new AdminUser( ), "SITELABELS_MANAGEMENT" );
+            request = new MockHttpServletRequest( );
+            request.addParameter( "id", toRemove.getKey( ) );
+            request.addParameter( "action", "removeLabel" );
+            request.addParameter( SecurityTokenService.PARAMETER_TOKEN, _securityTokenService.getToken( request, "removeLabel" ) );
+            AdminUserUtils.registerAdminUserWithRight( request, new AdminUser( ), LabelJspBean.RIGHT_MANAGESITELABELS );
+
             try {
-                bean.processController( request, new MockHttpServletResponse( ) );
+                instance.processController( request, new MockHttpServletResponse( ) );
                 Label label = LabelService.findByPrimaryKey( toRemove.getKey( ) );
                 assertNotNull( label );
                 assertEquals( toRemove.getKey( ), label.getKey( ) );
@@ -204,4 +221,5 @@ public class LabelJspBeanTest extends LuteceTestCase
             LabelService.remove( toRemove.getKey( ) );
         }
     }
+
 }
