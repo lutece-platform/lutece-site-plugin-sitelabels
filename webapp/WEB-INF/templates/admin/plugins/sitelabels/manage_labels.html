@@ -1,46 +1,41 @@
-<@row>
-    <@columns>
-		<@box>
-			<@boxHeader title='#i18n{sitelabels.manage_labels.tableLabel}'>
-				<@tform method='post' action='jsp/admin/plugins/sitelabels/ManageLabels.jsp'>
-					<@button name='view_createLabel' type='submit' buttonIcon='plus' title='#i18n{sitelabels.manage_labels.buttonAdd}' />
-				</@tform>
-			</@boxHeader>
-			<@boxBody>
-				<@messages infos=infos />
-
-				<@alert color='info'>
-					#i18n{sitelabels.manage_labels.info}
-				</@alert>    
-
-				<@paginationAdmin paginator=paginator combo=1 />
-
-				<@table>
-					<tr>
-						<th>#i18n{sitelabels.manage_labels.columnKey}</th>
-						<th>#i18n{sitelabels.manage_labels.columnValue}</th>
-						<th>#i18n{portal.util.labelActions}</th>
-					</tr>
-					<#list label_list?sort_by("key") as label >
-					<tr>
-						<td>
-							${label.key}
-						</td>
-						<td>
-							${(label.value)?html}
-						</td>
-						<td>
-							<@aButton href='jsp/admin/plugins/sitelabels/ManageLabels.jsp?view=modifyLabel&amp;id=${label.key}' title='#i18n{portal.util.labelModify}' hideTitle=['all'] buttonIcon='edit' size='sm' />
-							<@aButton href='jsp/admin/plugins/sitelabels/ManageLabels.jsp?action=confirmRemoveLabel&amp;id=${label.key}' title='#i18n{portal.util.labelDelete}' hideTitle=['all'] buttonIcon='trash' size='sm' color='danger' />
-						</td>
-					</tr>
-					</#list>
-				</@table>
-
-				<@paginationAdmin paginator=paginator />
-			</@boxBody>
-		</@box>
-	</@columns>
-</@row>
-
-
+<@pageContainer>
+    <@pageColumn>
+		<@pageHeader title='#i18n{sitelabels.manage_labels.tableLabel}'>
+			<@tform method='post' type='inline'>
+				<@formGroup labelFor='plugin_type' labelKey='#i18n{portal.system.manage_plugins.buttonFilter}' hideLabel=['all'] formStyle='inline'>
+					<@inputGroup>
+						<@input type='text' name='search_labels' id='search_label' placeHolder='#i18n{portal.system.manage_plugins.buttonFilter}' params='autocomplete="off" addons' />
+						<@button color='primary' title='#i18n{portal.system.manage_plugins.buttonFilter}' buttonIcon='filter' hideTitle=['all'] />
+					</@inputGroup>
+				</@formGroup>
+			</@tform>
+			<@offcanvas targetUrl='jsp/admin/plugins/sitelabels/ManageLabels.jsp?view_createLabel=' targetElement='#create_label' redirectForm=false id='label_create' title='#i18n{sitelabels.create_label.title}' btnTitle='#i18n{sitelabels.manage_labels.buttonAdd}' btnIcon='plus' position='end' hideTitle=['xs','sm'] />
+		</@pageHeader>
+		<@messages infos=infos />
+		<@alert class='mt-2' titleLevel='h3' title='#i18n{sitelabels.manage_labels.info}' iconTitle='alert-triangle' />
+		<@manageFeature>
+		<#list label_list?sort_by('key') as label >
+			<@div class='item-labels'>
+				<@manageFeatureItem>
+					<@manageFeatureItemColumn auto=true valign='baseline'>#i18n{sitelabels.manage_labels.columnKey} : <@span class='fs-3 ms-2 fw-bold copy-content site-label'>${label.key}</@span> - #i18n{sitelabels.manage_labels.columnValue} : <@span class='fs-3 ms-2 fw-bold site-label'>${(label.value)?html}</@span></@manageFeatureItemColumn>
+					<@manageFeatureItemColumn align='end'>
+						<@offcanvas targetUrl='jsp/admin/plugins/sitelabels/ManageLabels.jsp?view=modifyLabel&amp;id=${label.key}' targetElement='#modify_label' redirectForm=false id='label_update_${label.key?keep_after_last(".")}' title='#i18n{sitelabels.manage_labels.tableLabel}' btnTitle='#i18n{portal.util.labelModify}' btnIcon='pencil' hideTitle=['xs','sm'] position='end' size='half' />
+						<@aButton href='jsp/admin/plugins/sitelabels/ManageLabels.jsp?action=confirmRemoveLabel&amp;id=${label.key}' title='#i18n{portal.util.labelDelete}' hideTitle=['xs','sm'] buttonIcon='trash' color='danger' />
+					</@manageFeatureItemColumn>
+				</@manageFeatureItem>
+			</@div>
+		</#list>
+		</@manageFeature>
+		<@paginationAdmin paginator=paginator combo=1 />
+	</@pageColumn>
+</@pageContainer>
+<@copyElementToClipboard />
+<script type="module">
+import LuteceSearchList from './themes/shared/modules/luteceSearchList.js';
+const searchInput = document.querySelector("#search_label");
+const searchElementList = document.querySelectorAll(".item-labels");
+new LuteceSearchList( searchInput, searchElementList, {
+	searchableChild: [".site-label"],
+	highlight: true,
+});
+</script>

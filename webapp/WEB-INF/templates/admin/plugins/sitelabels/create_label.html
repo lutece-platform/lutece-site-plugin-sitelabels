@@ -1,32 +1,23 @@
-<@row>
-    <@columns>
-		<@box>
-			<@boxHeader title='#i18n{sitelabels.create_label.title}' />
-			<@boxBody>
-
-				<@tform action='jsp/admin/plugins/sitelabels/ManageLabels.jsp'>
-					<@input type='hidden' name='token' id='token' value='${token?html}' />
-					<fieldset>
-						<legend>#i18n{sitelabels.create_label.tableLabel}</legend>
-
-						<@messages errors=errors />
-						<@input type='hidden' id='id' name='id' />
-						
-						<@formGroup labelFor='key' labelKey='#i18n{sitelabels.create_label.labelKey}' helpKey='#i18n{sitelabels.create_label.labelKey.help}' mandatory=true>
-							<@input type='text' id='key' name='key' value='${(label.key!\'\')?html}' />
-						</@formGroup>
-						
-						<@formGroup labelFor='value' labelKey='#i18n{sitelabels.create_label.labelValue}' helpKey='#i18n{sitelabels.create_label.labelValue.help}' mandatory=true>
-							<@input type='text' id='value' name='value' value='${(label.value!\'\')?html}' />
-						</@formGroup>
-
-						<@formGroup>
-							<@button type='submit' name='action_createLabel' title='#i18n{portal.util.labelCreate}' />
-							<@button type='submit' name='view_manageLabels' title='#i18n{portal.util.labelCancel}' cancel=true />
-						</@formGroup>
-					</fieldset>
-				</@tform>
-			</@boxBody>
-		</@box>
-	</@columns>
-</@row>
+<@pageContainer>
+    <@pageColumn>
+		<@pageHeader title='#i18n{sitelabels.create_label.title}' />
+		<@div id='create_label'>
+			<@tform action='jsp/admin/plugins/sitelabels/ManageLabels.jsp'>
+			<@input type='hidden' name='token' id='token' value='${token?html}' />
+			<@messages errors=errors />
+			<@fieldSet legend='#i18n{sitelabels.create_label.tableLabel}'>
+				<@formGroup labelFor='key' labelKey='#i18n{sitelabels.create_label.labelKey}' helpKey='#i18n{sitelabels.create_label.labelKey.help}' mandatory=true>
+					<@input type='text' id='key' name='key' value='${(label.key!\'\')?html}' />
+				</@formGroup>
+				<@formGroup labelFor='value' labelKey='#i18n{sitelabels.create_label.labelValue}' helpKey='#i18n{sitelabels.create_label.labelValue.help}' mandatory=true>
+					<@input type='text' id='value' name='value' value='${(label.value!\'\')?html}' />
+				</@formGroup>
+				<@formGroup>
+					<@button type='submit' name='action_createLabel' title='#i18n{portal.util.labelCreate}' />
+					<@button type='submit' name='view_manageLabels' title='#i18n{portal.util.labelCancel}' cancel=true />
+				</@formGroup>
+			</@fieldSet>
+			</@tform>
+		</@div>
+	</@pageColumn>
+</@pageContainer>

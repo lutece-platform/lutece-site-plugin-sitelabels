@@ -1,36 +1,28 @@
-<@row>
-    <@columns>
-		<@box>
-			<@boxHeader title='#i18n{sitelabels.modify_label.title}' />
-			<@boxBody>
-
-				<@tform action='jsp/admin/plugins/sitelabels/ManageLabels.jsp'>
-					<@input type='hidden' name='token' id='token' value='${token?html}' />
-					<@input type='hidden' id='key' name='key' value='${(label.key)?html}' />
-					<fieldset>
-						<legend>#i18n{sitelabels.modify_label.tableLabel}</legend>
-
-						<@messages errors=errors />
-						
-						<@formGroup labelFor='key' labelKey='#i18n{sitelabels.modify_label.labelKey}' helpKey='#i18n{sitelabels.modify_label.labelKey.help}' mandatory=true>
-							<@input type='text' id='key_view' name='key_view' value=label.key disabled=true />
-						</@formGroup>
-
-						<@formGroup labelFor='value' labelKey='#i18n{sitelabels.modify_label.labelValue}' helpKey='#i18n{sitelabels.modify_label.labelValue.help}' mandatory=true>
-							<#if label.key?ends_with( ".textblock" )>
-								<@input type='textarea' name='value' id='value'>${(label.value)?html}</@input>
-							<#else>
-								<@input type='text' id='value' name='value' value='${(label.value)?html}' />
-							</#if>
-						</@formGroup>
-						
-						<@formGroup>
-							<@button type='submit' name='action_modifyLabel' title='#i18n{portal.util.labelModify}' buttonIcon='check' />
-							<@button type='submit' name='view_manageLabels' title='#i18n{portal.util.labelCancel}' buttonIcon='times' cancel=true />
-						</@formGroup>
-					</fieldset>
-				</@tform>
-			</@boxBody>
-		</@box>
-	</@columns>
-</@row>
+<@pageContainer>
+    <@pageColumn>
+		<@pageHeader title='#i18n{sitelabels.modify_label.title}' />
+		<@div id='modify_label'>
+			<@tform action='jsp/admin/plugins/sitelabels/ManageLabels.jsp'>
+			<@input type='hidden' name='token' id='token' value='${token?html}' />
+			<@input type='hidden' id='key' name='key' value='${(label.key)?html}' />
+			<@messages errors=errors />
+			<@fieldSet legend='#i18n{sitelabels.modify_label.tableLabel}'>
+				<@formGroup labelFor='key' labelKey='#i18n{sitelabels.modify_label.labelKey}' helpKey='#i18n{sitelabels.modify_label.labelKey.help}' mandatory=true>
+						<@input type='text' id='key_view' name='key_view' value=label.key disabled=true />
+					</@formGroup>
+				<@formGroup labelFor='value' labelKey='#i18n{sitelabels.modify_label.labelValue}' helpKey='#i18n{sitelabels.modify_label.labelValue.help}' mandatory=true>
+					<#if label.key?ends_with( ".textblock" )>
+						<@input type='textarea' name='value' id='value'>${(label.value)?html}</@input>
+					<#else>
+						<@input type='text' id='value' name='value' value='${(label.value)?html}' />
+					</#if>
+				</@formGroup>
+				<@formGroup>
+					<@button type='submit' name='action_modifyLabel' title='#i18n{portal.util.labelModify}' />
+					<@button type='submit' name='view_manageLabels' title='#i18n{portal.util.labelCancel}' cancel=true />
+				</@formGroup>
+			</@fieldSet>
+			</@tform>
+		</@div>
+	</@pageColumn>
+</@pageContainer>
