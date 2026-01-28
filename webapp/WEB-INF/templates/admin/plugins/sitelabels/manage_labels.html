@@ -2,7 +2,7 @@
     <@pageColumn>
 		<@pageHeader title='#i18n{sitelabels.manage_labels.tableLabel}'>
 			<@tform method='post' type='inline'>
-				<@formGroup labelFor='plugin_type' labelKey='#i18n{portal.system.manage_plugins.buttonFilter}' hideLabel=['all'] formStyle='inline'>
+				<@formGroup labelFor='search_label' labelKey='#i18n{portal.system.manage_plugins.buttonFilter}' hideLabel=['all'] formStyle='inline'>
 					<@inputGroup>
 						<@input type='text' name='search_labels' id='search_label' placeHolder='#i18n{portal.system.manage_plugins.buttonFilter}' params='autocomplete="off" addons' />
 						<@button color='primary' title='#i18n{portal.system.manage_plugins.buttonFilter}' buttonIcon='filter' hideTitle=['all'] />
