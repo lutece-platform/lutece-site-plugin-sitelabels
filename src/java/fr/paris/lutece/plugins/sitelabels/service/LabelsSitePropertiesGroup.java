@@ -34,11 +34,13 @@
 package fr.paris.lutece.plugins.sitelabels.service;
 
 import fr.paris.lutece.portal.service.site.properties.ILocalizedSitePropertiesGroup;
+import jakarta.enterprise.context.ApplicationScoped;
 
 
 /**
  * Google Site Properties Group
  */
+@ApplicationScoped
 public class LabelsSitePropertiesGroup implements ILocalizedSitePropertiesGroup
 {
     private static final String KEY_NAME = "sitelabels.site_properties_group.name";
