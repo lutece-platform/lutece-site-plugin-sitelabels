@@ -12,12 +12,12 @@
 			<@offcanvas targetUrl='jsp/admin/plugins/sitelabels/ManageLabels.jsp?view_createLabel=' targetElement='#create_label' redirectForm=false id='label_create' title='#i18n{sitelabels.create_label.title}' btnTitle='#i18n{sitelabels.manage_labels.buttonAdd}' btnIcon='plus' position='end' hideTitle=['xs','sm'] />
 		</@pageHeader>
 		<@messages infos=infos />
-		<@alert class='mt-2' titleLevel='h3' title='#i18n{sitelabels.manage_labels.info}' iconTitle='alert-triangle' />
+		<@alert class='mt-2' titleLevel='h3' title='#i18n{sitelabels.manage_labels.info}' iconTitle='alert-triangle' iconClass='icon icon-1' />
 		<@manageFeature>
 		<#list label_list?sort_by('key') as label >
 			<@div class='item-labels'>
 				<@manageFeatureItem>
-					<@manageFeatureItemColumn auto=true valign='baseline'>#i18n{sitelabels.manage_labels.columnKey} : <@span class='fs-3 ms-2 fw-bold copy-content site-label'>${label.key}</@span> - #i18n{sitelabels.manage_labels.columnValue} : <@span class='fs-3 ms-2 fw-bold site-label'>${(label.value)?html}</@span></@manageFeatureItemColumn>
+					<@manageFeatureItemColumn auto=true >#i18n{sitelabels.manage_labels.columnKey} : <@span class='ms-2 fw-bold copy-content site-label' params='title="#i18n{sitelabels.manage_labels.columnKey} : ${label.key}"'>#${label.key}</@span> - #i18n{sitelabels.manage_labels.columnValue} : <@span class='ms-2 fw-bold site-label'>${(label.value)?html}</@span></@manageFeatureItemColumn>
 					<@manageFeatureItemColumn align='end'>
 						<@offcanvas targetUrl='jsp/admin/plugins/sitelabels/ManageLabels.jsp?view=modifyLabel&amp;id=${label.key}' targetElement='#modify_label' redirectForm=false id='label_update_${label.key?keep_after_last(".")}' title='#i18n{sitelabels.manage_labels.tableLabel}' btnTitle='#i18n{portal.util.labelModify}' btnIcon='pencil' hideTitle=['xs','sm'] position='end' size='half' />
 						<@aButton href='jsp/admin/plugins/sitelabels/ManageLabels.jsp?action=confirmRemoveLabel&amp;id=${label.key}' title='#i18n{portal.util.labelDelete}' hideTitle=['xs','sm'] buttonIcon='trash' color='danger' />
@@ -29,7 +29,7 @@
 		<@paginationAdmin paginator=paginator combo=1 />
 	</@pageColumn>
 </@pageContainer>
-<@copyElementToClipboard />
+<@copyElementToClipboard btnClass='link' />
 <script type="module">
 import LuteceSearchList from './themes/shared/modules/luteceSearchList.js';
 const searchInput = document.querySelector("#search_label");
