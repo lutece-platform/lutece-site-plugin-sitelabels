@@ -9,7 +9,7 @@
     <description>sitelabels.plugin.description</description>
     <provider>sitelabels.plugin.provider</provider>
     <provider-url>http://dev.lutece.paris.fr</provider-url>
-    <icon-url>images/admin/skin/feature_default_icon.png</icon-url>
+    <icon-url>themes/admin/shared/plugins/sitelabels/images/label.svg</icon-url>
     <copyright>Copyright (c) 2014 City of Paris</copyright>
     <db-pool-required>0</db-pool-required>
     <core-version-dependency>
