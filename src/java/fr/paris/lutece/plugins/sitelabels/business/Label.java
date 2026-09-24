@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.sitelabels.business;
 
+import java.io.Serializable;
+
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.NotEmpty;
 
@@ -41,8 +43,10 @@ import jakarta.validation.constraints.NotEmpty;
 /**
  * This is the business class for the object Label
  */
-public class Label
+public class Label implements Serializable
 {
+    private static final long serialVersionUID = 1L;
+
     // Variables declarations 
     @NotEmpty( message = "#i18n{portal.validation.message.notEmpty}" )
     @Pattern( regexp = "[a-z][a-z_\\.]*", message = "#i18n{sitelabels.validation.label.Key.pattern}" )
