@@ -7,7 +7,7 @@
 			<@input type='hidden' id='key' name='key' value=label.key />
 			<@messages errors=errors />
 			<@fieldSet legend='#i18n{sitelabels.modify_label.tableLabel}'>
-				<@formGroup labelFor='key' labelKey='#i18n{sitelabels.modify_label.labelKey}' helpKey='#i18n{sitelabels.modify_label.labelKey.help}' mandatory=true>
+				<@formGroup labelFor='key_view' labelKey='#i18n{sitelabels.modify_label.labelKey}' helpKey='#i18n{sitelabels.modify_label.labelKey.help}' mandatory=true>
 						<@input type='text' id='key_view' name='key_view' value=label.key disabled=true />
 					</@formGroup>
 				<@formGroup labelFor='value' labelKey='#i18n{sitelabels.modify_label.labelValue}' helpKey='#i18n{sitelabels.modify_label.labelValue.help}' mandatory=true>
