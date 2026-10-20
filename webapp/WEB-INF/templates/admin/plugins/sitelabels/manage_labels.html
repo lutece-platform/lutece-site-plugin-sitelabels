@@ -12,7 +12,7 @@
 			<@offcanvas targetUrl='jsp/admin/plugins/sitelabels/ManageLabels.jsp?view_createLabel=' targetElement='#create_label' redirectForm=false id='label_create' title='#i18n{sitelabels.create_label.title}' btnTitle='#i18n{sitelabels.manage_labels.buttonAdd}' btnIcon='plus' position='end' hideTitle=['xs','sm'] />
 		</@pageHeader>
 		<@messages infos=infos />
-		<@alert class='mt-2' titleLevel='h2' title='#i18n{sitelabels.manage_labels.infoTitle}' iconTitle='alert-triangle' iconClass='icon icon-1'><p class="mb-0">#i18n{sitelabels.manage_labels.info}</p></@alert>
+		<@alert class='mt-2' titleLevel='h2' titleClass='h4' title='#i18n{sitelabels.manage_labels.infoTitle}' iconTitle='alert-triangle' iconClass='icon icon-1'><p class="mb-0">#i18n{sitelabels.manage_labels.info}</p></@alert>
 		<@manageFeature>
 		<#list label_list?sort_by('key') as label >
 				<@manageFeatureItem liClass='item-labels'>
