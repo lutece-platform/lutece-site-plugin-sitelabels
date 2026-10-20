@@ -3,14 +3,14 @@
 		<@pageHeader title='#i18n{sitelabels.create_label.title}' />
 		<@div id='create_label'>
 			<@tform action='jsp/admin/plugins/sitelabels/ManageLabels.jsp'>
-			<@input type='hidden' name='token' id='token' value='${token?html}' />
+			<@input type='hidden' name='token' id='token' value=token />
 			<@messages errors=errors />
 			<@fieldSet legend='#i18n{sitelabels.create_label.tableLabel}'>
 				<@formGroup labelFor='key' labelKey='#i18n{sitelabels.create_label.labelKey}' helpKey='#i18n{sitelabels.create_label.labelKey.help}' mandatory=true>
-					<@input type='text' id='key' name='key' value='${(label.key!\'\')?html}' />
+					<@input type='text' id='key' name='key' value=(label.key)!'' />
 				</@formGroup>
 				<@formGroup labelFor='value' labelKey='#i18n{sitelabels.create_label.labelValue}' helpKey='#i18n{sitelabels.create_label.labelValue.help}' mandatory=true>
-					<@input type='text' id='value' name='value' value='${(label.value!\'\')?html}' />
+					<@input type='text' id='value' name='value' value=(label.value)!'' />
 				</@formGroup>
 				<@formGroup>
 					<@button type='submit' name='action_createLabel' title='#i18n{portal.util.labelCreate}' />
