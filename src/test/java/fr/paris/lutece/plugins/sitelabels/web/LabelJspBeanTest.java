@@ -66,7 +66,7 @@ public class LabelJspBeanTest extends LuteceTestCase
         MockHttpServletRequest request = new MockHttpServletRequest( );
         final String testKey = "test_key";
         request.addParameter( "id", testKey );
-        request.addParameter( "action", "confirmRemoveLabel" );
+        request.addParameter( "view", "confirmRemoveLabel" );
         AdminUserUtils.registerAdminUserWithRight( request, new AdminUser( ), LabelJspBean.RIGHT_MANAGESITELABELS );
 
         instance.processController( request, new MockHttpServletResponse());

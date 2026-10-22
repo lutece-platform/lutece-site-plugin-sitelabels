@@ -101,12 +101,12 @@ public class LabelJspBean extends MVCAdminJspBean
     private static final String VIEW_MANAGE_LABELS = "manageLabels";
     private static final String VIEW_CREATE_LABEL = "createLabel";
     private static final String VIEW_MODIFY_LABEL = "modifyLabel";
+    private static final String VIEW_CONFIRM_REMOVE_LABEL = "confirmRemoveLabel";
 
     // Actions
     private static final String ACTION_CREATE_LABEL = "createLabel";
     private static final String ACTION_MODIFY_LABEL = "modifyLabel";
     private static final String ACTION_REMOVE_LABEL = "removeLabel";
-    private static final String ACTION_CONFIRM_REMOVE_LABEL = "confirmRemoveLabel";
 
     // Infos
     private static final String INFO_LABEL_CREATED = "sitelabels.info.label.created";
@@ -193,7 +193,7 @@ public class LabelJspBean extends MVCAdminJspBean
      * @param request The Http request
      * @return the html code to confirm
      */
-    @Action( ACTION_CONFIRM_REMOVE_LABEL )
+    @View( VIEW_CONFIRM_REMOVE_LABEL )
     public String getConfirmRemoveLabel( HttpServletRequest request )
     {
         String strKey = request.getParameter( PARAMETER_KEY );
