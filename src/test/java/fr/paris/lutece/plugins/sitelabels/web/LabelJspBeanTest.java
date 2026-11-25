@@ -129,6 +129,34 @@ public class LabelJspBeanTest extends LuteceTestCase
     }
 
     @Test
+    public void testDoCreateLabelWithAnExistingKeyIsRefused( ) throws AccessDeniedException
+    {
+        final String testKey = "test_existing_key";
+        Label existing = new Label( );
+        existing.setKey( LabelService.PREFIX + testKey );
+        existing.setValue( "orig" );
+        LabelService.create( existing );
+        try
+        {
+            MockHttpServletRequest request = new MockHttpServletRequest( );
+            request.addParameter( "key", testKey );
+            request.addParameter( "value", "overwritten" );
+            request.addParameter( "action", "createLabel" );
+            request.addParameter( SecurityTokenService.PARAMETER_TOKEN, _securityTokenService.getToken( request, "createLabel" ) );
+            AdminUserUtils.registerAdminUserWithRight( request, new AdminUser( ), LabelJspBean.RIGHT_MANAGESITELABELS );
+
+            instance.processController( request, new MockHttpServletResponse( ) );
+
+            assertEquals( "orig", LabelService.findByPrimaryKey( LabelService.PREFIX + testKey ).getValue( ),
+                    "creating a label with the key of an existing one should not overwrite its value" );
+        }
+        finally
+        {
+            LabelService.remove( LabelService.PREFIX + testKey );
+        }
+    }
+
+    @Test
     public void testDoModifyLabel(  )
     {
         MockHttpServletRequest request = new MockHttpServletRequest( );

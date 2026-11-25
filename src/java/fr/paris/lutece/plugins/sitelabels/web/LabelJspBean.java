@@ -94,6 +94,7 @@ public class LabelJspBean extends MVCAdminJspBean
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_LABEL = "sitelabels.message.confirmRemoveLabel";
+    private static final String MESSAGE_LABEL_ALREADY_EXISTS = "sitelabels.message.labelAlreadyExists";
     private static final String PROPERTY_DEFAULT_LIST_LABEL_PER_PAGE = "sitelabels.listLabels.itemsPerPage";
     private static final String VALIDATION_ATTRIBUTES_PREFIX = "sitelabels.model.entity.label.attribute.";
 
@@ -175,6 +176,14 @@ public class LabelJspBean extends MVCAdminJspBean
         if( bindingResult.isFailed() )
         {
             model.put( MVCUtils.MARK_ERRORS, bindingResult.getAllErrors( ) );
+            model.put( MARK_LABEL, label );
+            model.put( SecurityTokenService.MARK_TOKEN, getSecurityTokenService().getToken( request, ACTION_CREATE_LABEL ) );
+            return getPage( PROPERTY_PAGE_TITLE_CREATE_LABEL, TEMPLATE_CREATE_LABEL, model );
+        }
+
+        if ( LabelService.exists( LabelService.PREFIX + label.getKey(  ) ) )
+        {
+            addError( MESSAGE_LABEL_ALREADY_EXISTS, getLocale(  ) );
             model.put( MARK_LABEL, label );
             model.put( SecurityTokenService.MARK_TOKEN, getSecurityTokenService().getToken( request, ACTION_CREATE_LABEL ) );
             return getPage( PROPERTY_PAGE_TITLE_CREATE_LABEL, TEMPLATE_CREATE_LABEL, model );

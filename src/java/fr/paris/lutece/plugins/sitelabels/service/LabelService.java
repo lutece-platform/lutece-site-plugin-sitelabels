@@ -109,6 +109,20 @@ public final class LabelService
 
     ///////////////////////////////////////////////////////////////////////////
     // Finders
+
+    /**
+     * Tells whether a label exists
+     * @param strKey The key of the label, with the prefix
+     * @return true if a label has this key
+     */
+    public static boolean exists( String strKey )
+    {
+        if ( !strKey.startsWith( PREFIX ) ) {
+            throw new IllegalArgumentException( "Key does not start with " + PREFIX );
+        }
+
+        return DatastoreService.existsKey( strKey );
+    }
     /**
      * Returns an instance of a label whose identifier is specified in parameter
      *
